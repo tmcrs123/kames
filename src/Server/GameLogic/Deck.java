@@ -29,5 +29,7 @@ public class Deck{
     }
 
 
-
+    public void give4CardsTo(Hand hand) {
+        throw new UnsupportedOperationException();
+    }
 }

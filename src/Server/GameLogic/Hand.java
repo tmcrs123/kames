@@ -18,4 +18,8 @@ public class Hand {
     public Card[] getActiveCards() {
         return activeCards;
     }
+
+    public void clear(){
+        throw new UnsupportedOperationException();
+    }
 }

@@ -45,20 +45,31 @@ public class Game {
     }
 
     public void endGame() {
-
+        throw new UnsupportedOperationException();
     }
 
-
     private void giveInitialCardsToPlayers() {
-
         for (Client iPlayer : players) {
             deck.give4CardsTo(iPlayer.getHand());
         }
     }
 
-
     private void drawTableCards() {
         deck.give4CardsTo(tableHand);
+    }
+
+    private void burnTableHand() {
+        tableHand.clear();
+    }
+
+
+    private boolean isTurnOver() {
+        throw new UnsupportedOperationException();
+    }
+
+
+    private void keepProcessingTrades() {
+        throw new UnsupportedOperationException();
     }
 
 
