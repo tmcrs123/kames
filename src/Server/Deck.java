@@ -5,9 +5,9 @@ import java.util.LinkedList;
 /**
  * Created by tiagoRodrigues on 20/02/2017.
  */
-public class Cards {
+public class Deck{
 
-    private LinkedList deck = new LinkedList();
+    private LinkedList cards = new LinkedList();
 
 
     public void showLastCard(){
