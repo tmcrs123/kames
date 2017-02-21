@@ -1,6 +1,7 @@
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -19,16 +20,16 @@ public class Chat {
      */
 
 
-    private CopyOnWriteArrayList<ClientHandler> clients = new CopyOnWriteArrayList<>();
-    boolean gameStarted;
-    int portNumber = 8080;
-    String host = "localhost";
+    private static final int PORT_NUMBER = 8080;
+    private static final String HOST = "localhost";
 
+    private List<ClientHandler> clients;
+    private boolean gameStarted;
 
 
     public void start(){
         try {
-            ServerSocket serverSocket = new ServerSocket(8080);
+            ServerSocket serverSocket = new ServerSocket(PORT_NUMBER);
             Socket clientSocket = serverSocket.accept();
 
             //n meto o resto pk o Joaquim disse que queria ver a parte do server. Up to you
