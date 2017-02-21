@@ -1,3 +1,5 @@
+package Server;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -10,7 +12,7 @@ import java.net.Socket;
 public class ClientHandler implements Runnable {
 
     /**
-     * Client Handler Responsabilities
+     * Client.Client Handler Responsabilities
      *
      * Same shit we did before
      */

@@ -1,3 +1,5 @@
+package Client;
+
 import java.io.IOException;
 import java.net.Socket;
 
@@ -9,8 +11,8 @@ public class Client {
     /**
      * write messages to output stream
      * read messages from input stream and print them to screen
-     * be able to distinguish between messages from another players and messages from the Game
-     * Know when to print a message to Chat sys out or to Game sys out
+     * be able to distinguish between messages from another players and messages from the Server.Game
+     * Know when to print a message to Server.Chat sys out or to Server.Game sys out
      */
 
 

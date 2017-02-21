@@ -1,3 +1,5 @@
+package Server;
+
 /**
  * Created by tiagoRodrigues on 18/02/2017.
  */
@@ -6,7 +8,7 @@ public class Game {
     /**
      * Server Responsabilities:
      *
-     * Chat:
+     * Server.Chat:
      * Start the chat
      *
      *
