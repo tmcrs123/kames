@@ -1,4 +1,6 @@
-package Server;
+package Server.Chat;
+
+import Server.Chat.Chat;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;

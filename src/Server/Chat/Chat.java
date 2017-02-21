@@ -1,6 +1,6 @@
-package Server;
+package Server.Chat;
 
-import Server.ClientHandler;
+import Server.GameLogic.Game;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -13,7 +13,7 @@ import java.util.List;
 public class Chat {
 
     /**
-     * Server.Chat Responsabilities
+     * Server.Chat.Chat Responsabilities
      *
      * Handle multiple clients (Client.Client Handlers)
      * Distinguish between a game command and a chat message
@@ -26,6 +26,7 @@ public class Chat {
     private static final int PORT_NUMBER = 8080;
     private static final String HOST = "localhost";
 
+    private Game game;
     private List<ClientHandler> clients;
     private boolean gameStarted;
 

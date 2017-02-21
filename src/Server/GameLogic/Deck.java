@@ -1,4 +1,6 @@
-package Server;
+package Server.GameLogic;
+
+import Server.GameLogic.Card;
 
 import java.util.LinkedList;
 
@@ -7,7 +9,7 @@ import java.util.LinkedList;
  */
 public class Deck{
 
-    private LinkedList cards = new LinkedList();
+    private LinkedList<Card> cards = new LinkedList();
 
 
     public void showLastCard(){

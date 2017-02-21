@@ -1,5 +1,7 @@
 package Client;
 
+import Server.GameLogic.Hand;
+
 import java.io.IOException;
 import java.net.Socket;
 
@@ -11,15 +13,16 @@ public class Client {
     /**
      * write messages to output stream
      * read messages from input stream and print them to screen
-     * be able to distinguish between messages from another players and messages from the Server.Game
-     * Know when to print a message to Server.Chat sys out or to Server.Game sys out
+     * be able to distinguish between messages from another players and messages from the Server.GameLogic.Game
+     * Know when to print a message to Server.Chat.Chat sys out or to Server.GameLogic.Game sys out
      */
 
 
     private Socket mySocket;
+    private Hand hand;
 
-    String host = "localhost";
-    int portNumber = 8080;
+    private String host = "localhost";
+    private int portNumber = 8080;
 
 
     public void clientConnect() {
@@ -44,6 +47,10 @@ public class Client {
             e.printStackTrace();
         }
 
+    }
+
+    public Hand getHand(){
+        return hand;
     }
 
 
