@@ -1,35 +1,39 @@
 package Server.GameLogic;
 
-import Server.GameLogic.Card;
-
 import java.util.LinkedList;
 
 /**
  * Created by tiagoRodrigues on 20/02/2017.
  */
-public class Deck{
+public class Deck {
 
     private LinkedList<Card> cards = new LinkedList();
 
 
-    public void showLastCard(){
+    public void showLastCard() {
         throw new UnsupportedOperationException();
     }
 
-    public void getRandomCard(){
+    public void getRandomCard() {
         throw new UnsupportedOperationException();
     }
 
-    public void addCard(){
+    public void addCard() {
         throw new UnsupportedOperationException();
     }
 
-    public void removeCard(){
+    public void removeCard() {
         throw new UnsupportedOperationException();
     }
 
 
     public void give4CardsTo(Hand hand) {
-        throw new UnsupportedOperationException();
+
+        for (int cardsnb = 0; cardsnb < 4; cardsnb++) {
+            hand.takeCard(cards.poll());
+        }
     }
+
+
+
 }
