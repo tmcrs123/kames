@@ -31,20 +31,22 @@ public class Deck {
 
 
 
-    public void showLastCard() {
-        throw new UnsupportedOperationException();
+    public Card showLastCard() {
+        return cards.getLast();
     }
 
-    public void getRandomCard() {
-        throw new UnsupportedOperationException();
+    public Card getRandomCard() {
+
+        int rand = (int) (Math.random()*cards.size());
+        return cards.get(rand);
     }
 
-    public void addCard() {
-        throw new UnsupportedOperationException();
+    public void addCard(Card card) {
+        cards.add(card);
     }
 
     public void removeCard() {
-        throw new UnsupportedOperationException();
+        cards.remove();
     }
 
 
