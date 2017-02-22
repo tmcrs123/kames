@@ -31,7 +31,7 @@ public class Hand {
     }
 
 
-    public void takeCard(Card card) {
+    public void receiveCard(Card card) {
         activeCards.add(card);
     }
 }

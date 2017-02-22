@@ -18,7 +18,6 @@ public class Deck {
     }
 
 
-
     private void initCards() {
 
         //CREATES 4 CARDS OF EACH VALUE
@@ -52,7 +51,7 @@ public class Deck {
     public void give4CardsTo(Hand hand) {
 
         for (int cardsnb = 0; cardsnb < 4; cardsnb++) {
-            hand.takeCard(cards.poll());
+            hand.receiveCard(cards.poll());
         }
     }
 
