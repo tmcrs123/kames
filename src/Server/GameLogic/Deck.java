@@ -8,7 +8,7 @@ import java.util.LinkedList;
  */
 public class Deck {
 
-    public static final String[] POSSIBLE_CARD_VALUES = {"A", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
+    public static final String[] POSSIBLE_CARD_VALUES = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
 
     private LinkedList<Card> cards;
 
@@ -50,7 +50,7 @@ public class Deck {
 
     public void give4CardsTo(Hand hand) {
 
-        for (int cardsnb = 0; cardsnb < 4; cardsnb++) {
+        for (int givenCards = 0; givenCards < 4; givenCards++) {
             hand.receiveCard(cards.poll());
         }
     }
