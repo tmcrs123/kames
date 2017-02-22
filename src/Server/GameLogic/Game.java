@@ -15,7 +15,6 @@ public class Game {
     private Hand tableHand; //SHARED MUTABLE STATE
 
 
-
     public void init() {
         chat = new Chat();
         deck = new Deck();
@@ -93,8 +92,6 @@ public class Game {
      * Manage how long each round lasts
      * When round ends, put new cards on the table
      */
-
-
 
 
 }
