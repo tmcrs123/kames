@@ -4,22 +4,28 @@ package Server.GameLogic;
  * Created by peter on 21-02-2017.
  */
 
-import Server.GameLogic.Card;
+
+import java.util.ArrayList;
 
 /**
- * Class Hand represents the four playable cards of each player
+ * Class Hand represents each player's four playable cards
  * Game is going to have a Hand, representing the active cards of each turn
  *
  */
 public class Hand {
 
-    private Card[] activeCards;
+    private ArrayList<Card> activeCards;
 
-    public Card[] getActiveCards() {
+    public ArrayList<Card> getActiveCards() {
         return activeCards;
     }
 
     public void clear(){
         throw new UnsupportedOperationException();
+    }
+
+
+    public void takeCard(Card card) {
+        activeCards.add(card);
     }
 }
