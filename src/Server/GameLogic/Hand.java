@@ -10,18 +10,24 @@ import java.util.ArrayList;
 /**
  * Class Hand represents each player's four playable cards
  * Game is going to have a Hand, representing the active cards of each turn
- *
  */
 public class Hand {
 
     private ArrayList<Card> activeCards;
 
+
+
+
     public ArrayList<Card> getActiveCards() {
         return activeCards;
     }
 
-    public void clear(){
-        throw new UnsupportedOperationException();
+
+    public void clear() {
+
+        for (Card iCard : activeCards) {
+            activeCards.remove(iCard);
+        }
     }
 
 
