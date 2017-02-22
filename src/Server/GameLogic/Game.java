@@ -15,16 +15,17 @@ public class Game {
     private Hand tableHand; //SHARED MUTABLE STATE
 
 
+
     public void init() {
         chat = new Chat();
         deck = new Deck();
         players = new Client[4];// INITS A 4 PLAYERS ARRAY
         tableHand = new Hand();
         chat.start(); //STARTS THE CHAT
-        setTeams();
+        setSignal();
     }
 
-    public void setTeams() {
+    private void setSignal() {
 
     }
 
