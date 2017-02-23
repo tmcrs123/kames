@@ -24,7 +24,6 @@ public class Chat {
      *
      */
 
-
     private static final int PORT_NUMBER = 8080;                   // Port to listen for connections
 
     private Game game;                                             // Game object that will have all logic

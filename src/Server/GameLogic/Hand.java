@@ -17,7 +17,6 @@ public class Hand {
 
 
 
-
     public ArrayList<Card> getActiveCards() {
         return activeCards;
     }
@@ -31,7 +30,7 @@ public class Hand {
     }
 
 
-    public void takeCard(Card card) {
+    public void receiveCard(Card card) {
         activeCards.add(card);
     }
 }
