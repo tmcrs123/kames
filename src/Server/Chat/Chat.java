@@ -23,10 +23,7 @@ public class Chat {
      *
      */
 
-
     private static final int PORT_NUMBER = 8080;                   // Port to listen for connections
-    private static final String HOST = "localhost";                // Host = 127.0.0.1, runs on localhost
-
     private Game game;                                             // Game object that will have all logic
     private List<ClientHandler> clients;                           // List of Client threads
     private boolean gameStarted;                                   // If game has started = true
