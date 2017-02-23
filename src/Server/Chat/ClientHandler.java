@@ -49,11 +49,18 @@ public class ClientHandler implements Runnable {
 
                 } else if (!message.isEmpty()) {
 
-                    // TODO: Isto será durante o início do jogo.
-                    chatServer.sendMessageToPartner(nickname, message);
+                    if(message.startsWith("/")) {
+                        chatServer.runGameCommand(nickname, message);
+                        return;
+                    }
 
-                    // TODO: Isto será durante o jogo.
                     chatServer.broadcast(nickname, message);
+
+//                    // TODO: Isto será durante o início do jogo.
+//                    chatServer.sendMessageToPartner(nickname, message);
+//
+//                    // TODO: Isto será durante o jogo.
+//                    chatServer.broadcast(nickname, message);
                 }
             }
 
@@ -80,17 +87,26 @@ public class ClientHandler implements Runnable {
         this.parterNickname = nickname;
     }
 
+    public String getNickname() {
+        return nickname;
+    }
+
     // TODO: Envia a mensagem para o cliente.
-    public void send(String fromNickname, String message) {
+    public void sendMsgToSelf(String nickname, String message) {
 
         try {
 
-            out.write(fromNickname + ": " + message);
+            out.write(nickname + ": " + message);
             out.newLine();
             out.flush();
 
         } catch(IOException ex) {
             System.out.println("Error sending message to Client: " + nickname);
         }
+    }
+
+    public void sendMsgToPartner(String message) {
+
+        chatServer.sendMessageToPartner(parterNickname, nickname, message);
     }
 }

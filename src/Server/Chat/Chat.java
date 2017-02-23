@@ -5,6 +5,7 @@ import Server.GameLogic.Game;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -25,29 +26,31 @@ public class Chat {
 
 
     private static final int PORT_NUMBER = 8080;                   // Port to listen for connections
-    private static final String HOST = "localhost";                // Host = 127.0.0.1, runs on localhost
 
     private Game game;                                             // Game object that will have all logic
-    private List<ClientHandler> clients;                           // List of Client threads
+    private ArrayList<ClientHandler> clients;                           // List of Client threads
     private boolean gameStarted;                                   // If game has started = true
     private static final int PLAYER_LIMIT = 4;                     // Limit number of players
     private int numOfConnections;                                  // Number of players
 
 
-    public void start(){
+    public void start() {
+
+        clients = new ArrayList<>();
+
         try {
 
             System.out.println("Starting server at port: " + PORT_NUMBER + ", please wait...");
             ServerSocket serverSocket = new ServerSocket(PORT_NUMBER);
             System.out.println("Server started: " + serverSocket);
 
-            while(numOfConnections < PLAYER_LIMIT) {
+            while (numOfConnections < PLAYER_LIMIT) {
 
                 try {
 
-                // Waits for client connections
-                Socket clientSocket = serverSocket.accept();
-                System.out.println("Client connected: " + clientSocket.getInetAddress().getHostName());
+                    // Waits for client connections
+                    Socket clientSocket = serverSocket.accept();
+                    System.out.println("Client connected: " + clientSocket.getInetAddress().getHostName());
 
                     // Creates a new ClientHandler
                     numOfConnections++;
@@ -60,7 +63,7 @@ public class Chat {
                     thread.setName(name);
                     thread.start();
 
-                } catch(IOException ex) {
+                } catch (IOException ex) {
                     System.out.println("Error receiving the client connection: " + ex.getMessage());
                 }
             }
@@ -70,43 +73,36 @@ public class Chat {
         }
     }
 
-    /**
-     * Checks the message for commands, if it is a command it will
-     * start with a "/". If not it will send a chat message.
-     * @param message
-     */
-    public void validateMessage(String nickname, String message){
-
-        if(message.startsWith("/")) {
-            runGameCommand(nickname, message);
-
-        } else if(gameStarted) {
-            broadcast(nickname, message);
-
-        } else {
-            sendMessageToPartner(nickname, message);
-        }
-    }
-
     public void runGameCommand(String nickname, String message){
         throw new UnsupportedOperationException();
     }
 
-    public void sendMessageToPartner(String nickname, String message){
-        throw new UnsupportedOperationException();
+    public void sendMessageToPartner(String partnerNickname, String nickname, String message){
+
+        for(ClientHandler client: clients) {
+
+            if(client.getNickname().equals(partnerNickname)) {
+
+                client.sendMsgToSelf(nickname, message);
+            }
+        }
     }
 
     public void broadcast(String nickname, String message){
 
         synchronized (clients) {
 
+            System.out.println(nickname + ":" + message);
+
             Iterator<ClientHandler> it = clients.iterator();
 
             while(it.hasNext()) {
-                it.next().send(nickname, message);
+                it.next().sendMsgToSelf(nickname, message);
             }
         }
     }
 
-
+    public void setGame(Game game) {
+        this.game = game;
+    }
 }

@@ -22,6 +22,7 @@ public class Game {
         players = new Client[4];// INITS A 4 PLAYERS ARRAY
         tableHand = new Hand();
         chat.start(); //STARTS THE CHAT
+        chat.setGame(this);
         setSignal();
     }
 
@@ -29,11 +30,11 @@ public class Game {
 
     }
 
-    public void start() {
-        //showForbiddenCard();
-        giveInitialCardsToPlayers();
-        startNewTurn();
-    }
+//    public void start() {
+//        //showForbiddenCard();
+//        giveInitialCardsToPlayers();
+//        startNewTurn();
+//    }
 
     private void startNewTurn() {
 
@@ -53,6 +54,7 @@ public class Game {
         for (Client iPlayer : players) {
             deck.give4CardsTo(iPlayer.getHand());
         }
+
     }
 
     private void drawTableCards() {
