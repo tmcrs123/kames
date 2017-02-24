@@ -1,6 +1,7 @@
 package Server.Chat;
 
 import Server.Chat.Chat;
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 
 import java.io.*;
 import java.net.Socket;
@@ -16,12 +17,12 @@ public class ClientHandler implements Runnable {
      * Same shit we did before
      */
 
-    private Chat chatServer;                        // Chat serve
+    private Chat chatServer;                        // Chat server
     private Socket clientSocket;
     private BufferedWriter out = null;
     private BufferedReader in = null;
     private String nickname;
-    private String parterNickname;
+    private String partnerNickname;
 
     public ClientHandler (Socket socket , Chat chatServer) throws IOException {
         this.clientSocket = socket;
@@ -37,6 +38,10 @@ public class ClientHandler implements Runnable {
         System.out.println("Thread " + Thread.currentThread().getName() + " has started.");
 
         try {
+
+            setupNickname();
+
+            setupPartner();
 
             while(!clientSocket.isClosed()) {
                 ;
@@ -55,10 +60,8 @@ public class ClientHandler implements Runnable {
                     }
 
                     chatServer.broadcast(nickname, message);
-
 //                    // TODO: Isto será durante o início do jogo.
 //                    chatServer.sendMessageToPartner(nickname, message);
-//
 //                    // TODO: Isto será durante o jogo.
 //                    chatServer.broadcast(nickname, message);
                 }
@@ -77,16 +80,10 @@ public class ClientHandler implements Runnable {
         return out;
     }
 
-    // TODO: A chamar para a primeira mensagem recebida.
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
-    // TODO: A chamar para quando o partner é definido.
-    public void setParterNickname(String nickname) {
-        this.parterNickname = nickname;
-    }
-
+    /**
+     * Returns the player nickname.
+     * @return
+     */
     public String getNickname() {
         return nickname;
     }
@@ -107,6 +104,78 @@ public class ClientHandler implements Runnable {
 
     public void sendMsgToPartner(String message) {
 
-        chatServer.sendMessageToPartner(parterNickname, nickname, message);
+        chatServer.sendMessageToPartner(partnerNickname, nickname, message);
+    }
+
+    private void setupNickname() {
+
+        boolean nickname = false;
+
+        while(!nickname) {
+
+            try {
+
+                out.write("Please insert your nickname: ");
+                out.flush();
+
+                String message = in.readLine();
+
+                if(message.length() > 12) {
+                    out.write("Your username can't be longer than 12 characters.");
+                    out.newLine();
+                    out.flush();
+
+                } else {
+                    this.nickname = message;
+                    nickname = true;
+                    out.write("Your nickname has been set. " + message);
+                    out.newLine();
+                    out.flush();
+                }
+
+            } catch(IOException ex) {
+                System.out.println("Error setting up player " + Thread.currentThread().getName() + ": " + ex.getMessage());
+            }
+        }
+    }
+
+    /**
+     * Setups the teams so the game can start.
+     * 1 - Waits for the 4 players
+     * 2 - Calls the chat server method to setup the partners for each player
+     * 3 - Writes out to the players who are their partners.
+     */
+    private void setupPartner() {
+
+/* 1: */ while(chatServer.getNumOfConnections() < Chat.PLAYER_LIMIT) {
+
+            try {
+
+                out.write("Waiting for the other players.... Currently " + chatServer.getNumOfConnections() + " online.");
+                out.newLine();
+                out.flush();
+                Thread.sleep(3000);
+
+            } catch (IOException ex) {
+                System.out.println("Error setting up the teams => CLIENT HANDLER : " + ex.getMessage());
+
+            } catch (InterruptedException ex) {
+                System.out.println("Error waiting for players => CLIENT HANDLER : " + ex.getMessage());
+            }
+        }
+
+/* 2:*/ chatServer.setPartners();
+
+/* 3:*/ try {
+            out.write("Game - Your partner is " + partnerNickname + ".\n");
+            out.flush();
+
+        } catch(IOException ex) {
+            System.out.println("Error writing the partner. CLIENT HANDLER : " + ex.getMessage());
+        }
+    }
+
+    public void setPartnerNickname(String partnerNickname) {
+        this.partnerNickname = partnerNickname;
     }
 }
