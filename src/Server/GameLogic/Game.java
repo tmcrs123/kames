@@ -84,7 +84,7 @@ public class Game {
         }
 
         if (endCommand.equals("KAMES")) {
-            if (hasKames(player.getPartner()){
+            if (hasKames(player.getPartner())){
                 winRound(player, player.getPartner());
                 return;
             }
