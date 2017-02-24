@@ -20,7 +20,6 @@ public class Client {
      * Know when to print a message to Server.Chat.Chat sys out or to Server.GameLogic.Game sys out
      */
 
-
     private Socket socket;
     private Hand hand;
     private String SERVER_IP = "localhost";
@@ -119,6 +118,7 @@ public class Client {
             e.printStackTrace();
         }
     }
+}
 
 
 
