@@ -15,8 +15,6 @@ public class Hand {
 
     private ArrayList<Card> activeCards;
 
-
-
     public ArrayList<Card> getActiveCards() {
         return activeCards;
     }

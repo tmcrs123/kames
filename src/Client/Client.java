@@ -29,13 +29,6 @@ public class Client {
     private BufferedReader userInput;
     private boolean connected;
 
-    public static void main(String[] args) {
-
-        Client c = new Client();
-        c.connect();
-        c.startClient();
-    }
-
     public Hand getHand() {
         return hand;
     }
