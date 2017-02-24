@@ -2,7 +2,10 @@ package Client;
 
 import Server.GameLogic.Hand;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.Socket;
 
 /**
@@ -18,40 +21,104 @@ public class Client {
      */
 
 
-    private Socket mySocket;
+    private Socket socket;
     private Hand hand;
+    private String SERVER_IP = "localhost";
+    private final int SERVER_PORT = 8080;
+    private BufferedReader in;
+    private PrintWriter out;
+    private BufferedReader userInput;
+    private boolean connected;
 
-    private String host = "192.168.0.119";
-    private int portNumber = 8080;
+    public static void main(String[] args) {
 
+        Client c = new Client();
+        c.connect();
+        c.startClient();
+    }
 
-    public void clientConnect() {
+    public Hand getHand() {
+        return hand;
+    }
 
-        mySocket = null;
+    public void connect() {
 
         try {
-            //establish connection to the server
-            mySocket = new Socket(host, portNumber);
+            socket = new Socket(SERVER_IP, SERVER_PORT);
 
-
-            //start read and write threads
-
-            Thread read = new Thread(new ClientRead(mySocket));
-            read.start();
-
-            Thread write = new Thread(new ClientWrite(mySocket));
-            write.start();
-
+            // input and output streams initializing and System.in console input
+            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            out = new PrintWriter(socket.getOutputStream(), true);
+            userInput = new BufferedReader(new InputStreamReader(System.in));
+            connected = true;
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-    }
-
-    public Hand getHand(){
-        return hand;
     }
 
 
-}
+    public void startClient() {
+
+        //Reads from System.in @userInput  and writes to output stream @out
+        //Creates an anonymous runnable class
+
+        Thread clientWriterThread = new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+
+                String in = "";
+
+                while (in != null) {
+
+                    //Blocks while waiting input from client
+                    try {
+                        in = userInput.readLine();
+                        out.println(in);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    if (in.equals("QUIT"))
+                        disconnect();
+                }
+            }
+        });
+        clientWriterThread.start();
+
+        // Reader from the input stream @in and writes to client console using System.out
+
+        while (connected) {
+
+            String inputMsg = null;
+            try {
+                inputMsg = in.readLine();
+            } catch (IOException e) {
+                e.getMessage();
+            }
+
+            System.out.println(inputMsg);
+
+            if (inputMsg == null) {
+                System.out.println("Connection lost");
+                disconnect();
+            }
+        }
+    }
+
+    private void disconnect() {
+
+        connected = false;
+        System.out.println("DISCONNECTING");
+
+        try {
+            socket.close();
+            System.exit(0);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
