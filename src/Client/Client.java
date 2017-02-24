@@ -21,7 +21,7 @@ public class Client {
     private Socket mySocket;
     private Hand hand;
 
-    private String host = "localhost";
+    private String host = "192.168.0.119";
     private int portNumber = 8080;
 
 
