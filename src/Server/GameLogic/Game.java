@@ -2,6 +2,7 @@ package Server.GameLogic;
 
 import Client.Client;
 import Server.Chat.Chat;
+import Server.Chat.ClientHandler;
 
 /**
  * Created by tiagoRodrigues on 18/02/2017.
@@ -66,8 +67,37 @@ public class Game {
         startNewTurn();
     }
 
-    public void endGame() {
-        throw new UnsupportedOperationException();
+    public void endGame(ClientHandler player, String endCommand) {
+
+        ClientHandler enemy1 = null;
+        ClientHandler enemy2 = null;
+
+        for (ClientHandler iPlayer : chat.getClients()) {
+            if(iPlayer == player || iPlayer == player.getPartner()){
+                continue;
+            }
+            if(enemy1 == null){
+                enemy1 = iPlayer;
+                return;
+            }
+            enemy2 = iPlayer;
+        }
+
+        if (endCommand.equals("KAMES")) {
+            if (hasKames(player.getPartner()){
+                winRound(player, player.getPartner());
+                return;
+            }
+            winRound(enemy1, enemy2);
+            return;
+        }
+        if(endCommand.equals("CORTA")){
+            if(hasKames(enemy1) || hasKames(enemy2)){
+                winRound(player, player.getPartner());
+                return;
+            }
+            winRound(enemy1, enemy2);
+        }
     }
 
     private void giveInitialCardsToPlayers() {
@@ -96,7 +126,7 @@ public class Game {
     /**
      * Switches a player's card with one card from the table
      *
-     * @param tableCard table's card that the player wants to grab
+     * @param tableCard  table's card that the player wants to grab
      * @param playerCard player's card that he wants to put on the table
      * @returns true if card switch is made, false if not
      */
