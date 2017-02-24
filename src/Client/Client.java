@@ -28,6 +28,7 @@ public class Client {
     private PrintWriter out;
     private BufferedReader userInput;
     private boolean connected;
+    private LanternaTerminal lanternaTerminal;
 
     public Hand getHand() {
         return hand;
@@ -37,6 +38,11 @@ public class Client {
 
         try {
             socket = new Socket(SERVER_IP, SERVER_PORT);
+            
+            lanternaTerminal = new LanternaTerminal();
+            
+            lanternaTerminal.createLanternaWindow();
+            
 
             // input and output streams initializing and System.in console input
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
