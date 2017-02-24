@@ -32,43 +32,21 @@ public class ClientHandler implements Runnable {
         in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
     }
 
+    /**
+     * Thread.start();
+     */
     @Override
     public void run() {
 
         System.out.println("Thread " + Thread.currentThread().getName() + " has started.");
 
         try {
-
-            setupNickname();
-
-            setupPartner();
-
-            while(!clientSocket.isClosed()) {
-                ;
-                // Waits for client messages
-                String message = in.readLine();
-
-                if(message == null) {
-                    // There is message.
-                    continue;
-
-                } else if (!message.isEmpty()) {
-
-                    if(message.startsWith("/")) {
-                        chatServer.runGameCommand(nickname, message);
-                        return;
-                    }
-
-                    chatServer.broadcast(nickname, message);
-//                    // TODO: Isto será durante o início do jogo.
-//                    chatServer.sendMessageToPartner(nickname, message);
-//                    // TODO: Isto será durante o jogo.
-//                    chatServer.broadcast(nickname, message);
-                }
-            }
+            setupNickname();            // Setups player name with a validation step
+            setupPartner();             // Setups player's partners when 4 players are ready
+            startGame();                // Starts the normal chat listening for messages.
 
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Error starting the game at " + Thread.currentThread().getName() + " : " + e.getMessage());;
         }
     }
 
@@ -88,11 +66,14 @@ public class ClientHandler implements Runnable {
         return nickname;
     }
 
-    // TODO: Envia a mensagem para o cliente.
-    public void sendMsgToSelf(String nickname, String message) {
+    /**
+     * Broadcasts a message to all players
+     * @param nickname from who the message comes
+     * @param message text content of the message
+     */
+    public void sendMessage(String nickname, String message) {
 
         try {
-
             out.write(nickname + ": " + message);
             out.newLine();
             out.flush();
@@ -102,25 +83,29 @@ public class ClientHandler implements Runnable {
         }
     }
 
+    /**
+     * Sends a message to the team partner
+     * @param message text content to send to the partner
+     */
     public void sendMsgToPartner(String message) {
-
         chatServer.sendMessageToPartner(partnerNickname, nickname, message);
     }
 
+    /**
+     * Setups the player nickname
+     */
     private void setupNickname() {
 
         boolean nickname = false;
-
         while(!nickname) {
 
             try {
-
                 out.write("Please insert your nickname: ");
                 out.flush();
 
                 String message = in.readLine();
 
-                if(message.length() > 12) {
+                if(message.trim().length() > 12) {
                     out.write("Your username can't be longer than 12 characters.");
                     out.newLine();
                     out.flush();
@@ -147,11 +132,12 @@ public class ClientHandler implements Runnable {
      */
     private void setupPartner() {
 
-/* 1: */ while(chatServer.getNumOfConnections() < Chat.PLAYER_LIMIT) {
+        chatServer.incrementReadyPlayers();
+
+/* 1: */ while(chatServer.getReadyPlayers() < Chat.PLAYER_LIMIT) {
 
             try {
-
-                out.write("Waiting for the other players.... Currently " + chatServer.getNumOfConnections() + " online.");
+                out.write("Waiting for the other players.... Currently " + chatServer.getReadyPlayers() + " online.");
                 out.newLine();
                 out.flush();
                 Thread.sleep(3000);
@@ -175,7 +161,38 @@ public class ClientHandler implements Runnable {
         }
     }
 
+    /**
+     * Sets the partner nickname.
+     * @param partnerNickname
+     */
     public void setPartnerNickname(String partnerNickname) {
         this.partnerNickname = partnerNickname;
+    }
+
+    /**
+     * Starts the normal chat listening messages from all other players
+     * @throws IOException
+     */
+    public void startGame() throws IOException {
+
+        while(!clientSocket.isClosed()) {
+            ;
+            // Waits for client messages
+            String message = in.readLine();
+
+            if(message == null) {
+                // There is message.
+                continue;
+
+            } else if (!message.isEmpty()) {
+
+                if(message.startsWith("/")) {
+                    chatServer.runGameCommand(nickname, message);
+                    return;
+                }
+
+                chatServer.broadcast(nickname, message);
+            }
+        }
     }
 }

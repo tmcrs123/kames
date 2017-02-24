@@ -1,14 +1,13 @@
 package Server.Chat;
 
-import Client.Client;
+//import Server.GameLogic.Game;
+
 import Server.GameLogic.Game;
 
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 /**
  * Created by tiagoRodrigues on 18/02/2017.
@@ -27,11 +26,12 @@ public class Chat {
 
     private static final int PORT_NUMBER = 8080;                   // Port to listen for connections
 
-    private Game game;                                             // Game object that will have all logic
+    //    private Game game;                                             // Game object that will have all logic
     private ArrayList<ClientHandler> clients;                           // List of Client threads
     private boolean gameStarted;                                   // If game has started = true
     public static final int PLAYER_LIMIT = 4;                     // Limit number of players
     private int numOfConnections;                                  // Number of players
+    private int readyPlayers;
 
     /**
      * Starts the game:
@@ -98,7 +98,7 @@ public class Chat {
 
             if(client.getNickname().equals(partnerNickname)) {
 
-                client.sendMsgToSelf(nickname, message);
+                client.sendMessage(nickname, message);
             }
         }
     }
@@ -112,12 +112,12 @@ public class Chat {
 
         synchronized (clients) {
 
-            System.out.println(nickname + ":" + message);
+            System.out.println(nickname + ": " + message);
 
             for(ClientHandler iClient: clients) {
 
                 if(!iClient.getNickname().equals(nickname)) {
-                    iClient.sendMsgToSelf(nickname, message);
+                    iClient.sendMessage(nickname, message);
                 }
             }
         }
@@ -126,25 +126,7 @@ public class Chat {
     /**
      * Sets the team before the game starts.
      */
-    public synchronized void setPartners() {
-
-        boolean waitingToSet = true;
-
-        while(waitingToSet) {
-
-            int nameCount = 0;
-
-            for(ClientHandler client: clients) {
-
-                if(!client.getNickname().isEmpty()) {
-                    nameCount++;
-                }
-
-                if(nameCount == 4) {
-                    waitingToSet = false;
-                }
-            }
-        }
+    public void setPartners() {
 
         // FIRST TEAM
         clients.get(0).setPartnerNickname(clients.get(1).getNickname());
@@ -160,11 +142,19 @@ public class Chat {
         return numOfConnections;
     }
 
-    /**
-     * Sets the game that will handle all the logic of the game for the chat.
-     * @param game where all our game logic resides.
-     */
-    public void setGame(Game game) {
-        this.game = game;
+    public void incrementReadyPlayers() {
+        readyPlayers++;
     }
+
+    public int getReadyPlayers() {
+        return readyPlayers;
+    }
+
+//    /**
+//     * Sets the game that will handle all the logic of the game for the chat.
+//     * @param game where all our game logic resides.
+//     */
+//    public void setGame(Game game) {
+//        this.game = game;
+//    }
 }
